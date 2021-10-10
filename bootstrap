@@ -1,0 +1,30 @@
+#!/usr/bin/env bash -i
+set -e
+
+# Symlinks dotfiles in the ETC directory to the user home dir
+# Globals:
+#   None
+# Arguments:
+#   None
+main() {
+  local etc_dir="$(dirname -- $0)/etc"
+  for dotfile in $(find "${etc_dir}" -type f -exec realpath {} \;); do
+    local install_path="${HOME}/.$(basename $dotfile)"
+    echo "Installing $(basename $dotfile) ..."
+    if ! [[ -h "${install_path}" || -e "${install_path}" ]]; then
+      ln -s "${dotfile}" "${install_path}"
+    else
+      read -p "Replace ${install_path}? (Y/n): " proceed
+      if [[ "${proceed}" == [yY] ]]; then
+        mv "${install_path}" "${install_path}.bak"
+        echo -e "\tCreated a backup of ${install_path} -> ${install_path}.bak"
+        ln -s "${dotfile}" "${install_path}"
+      else
+        echo -e "\tSkipped $(basename $dotfile)"
+      fi
+    fi
+  done
+}
+
+main "$@"
+

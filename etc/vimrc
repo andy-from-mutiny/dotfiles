@@ -1,6 +1,8 @@
 set nocompatible
 filetype indent plugin on
 syntax on
+set spell
+set spelllang=en_us
 set hidden
 set noswapfile
 set autoindent
@@ -8,4 +10,6 @@ set number
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+let mapleader=" "
 nnoremap ; :
+nnoremap <leader>; :Explore<CR>

@@ -1,21 +1,24 @@
-# Please, install software in a decent place :)
-# share -> git-installed repositories
-# etc   -> configuration files
-LOCAL_DIR="$HOME/.local"
-ASDF_DIR="$LOCAL_DIR/share/asdf"; export ASDF_DIR
-ASDF_DATA_DIR=$ASDF_DIR; export ASDF_DATA_DIR
-if [[ -d $ASDF_DIR ]]; then
-  . $ASDF_DIR/asdf.sh
-  fpath=(${ASDF_DIR}/completions $fpath)
-fi
+# $LOCAL_DIR/share -> git repos / source code
+# $LOCAL_DIR/etc   -> dotfiles
+# $LOCAL_DIR/bin   -> executables
+LOCAL_DIR="${HOME}/.local"; export LOCAL_DIR
 
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _complete _ignored _approximate
 zstyle ':completion:*' max-errors 3
-zstyle :compinstall filename "$HOME/.zshrc"
+zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit && compinit
 # End of lines added by compinstall
 
+ASDF_DIR="${LOCAL_DIR}/share/asdf"; export ASDF_DIR
+ASDF_DATA_DIR="${ASDF_DIR}"; export ASDF_DATA_DIR
+if [[ -d "${ASDF_DIR}" ]]; then
+  source "${ASDF_DIR}/asdf.sh"
+  fpath=("${ASDF_DIR}/completions" $fpath)
+fi
+
+alias rm='rm -i'
+alias mkdir='mkdir -p'
 alias ll='ls -alh'
 alias l='ls -l'
 alias v='vim'
@@ -23,9 +26,10 @@ alias g='git'
 alias ga='git add'
 alias gs='git status'
 alias gc='git commit'
-alias gpush="git push origin $(git rev-parse --abbrev-ref HEAD)"
-alias gsave='git add . && git stash'
+alias gpush='git push origin $(git rev-parse --abbrev-ref HEAD)'
+alias gsave='git add . && git stash -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"'
 
+PATH="${LOCAL_DIR}/bin:/usr/local/sbin:${PATH}"
 EDITOR="vim"
 PS1="%~
 %# "
