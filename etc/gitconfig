@@ -18,6 +18,7 @@
         br = branch
         fo = fetch origin
         dt = difftool
+        unpush = !git push -f origin HEAD^:$(git remote show <remote_name> | awk '/HEAD branch/ {print $NF}')
 [diff]
 	tool = vimdiff
 [merge]

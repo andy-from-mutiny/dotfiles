@@ -26,12 +26,15 @@ if [[ -d "${ASDF_DIR}" ]]; then
 fi
 
 HOMEBREW_DIR="${LOCAL_DIR}/share/homebrew"; export HOMEBREW_DIR
+HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
 if [[ -d "${HOMEBREW_DIR}" ]]; then
   eval "$($HOMEBREW_DIR/bin/brew shellenv)"
   fpath=("${HOMEBREW_DIR}/share/zsh/site-functions" $fpath)
 fi
 
-alias rm='rm -i'
+alias rm='rm -iv'
+alias mv='mv -v'
+alias cp='cp -v'
 alias mkdir='mkdir -p'
 alias ll='ls -alhG'
 alias l='ls -lhG'
