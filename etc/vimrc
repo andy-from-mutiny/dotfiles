@@ -1,0 +1,11 @@
+set nocompatible
+filetype indent plugin on
+syntax on
+set hidden
+set noswapfile
+set autoindent
+set number
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+nnoremap ; :
