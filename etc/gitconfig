@@ -1,0 +1,26 @@
+[user]
+	email = andy@mutinyhq.com
+	name = Andy Young
+	signingkey = 44031564D35DF9D5
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[core]
+	pager = less -FRSX
+	editor = vim
+[alias]
+	p = !git push origin $(git rev-parse --abbrev-ref HEAD)
+        s = !git add . && git stash -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"
+        ci = commit
+	co = checkout
+        st = status -sb
+        br = branch
+        fo = fetch origin
+        dt = difftool
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+[difftool]
+	prompt = false

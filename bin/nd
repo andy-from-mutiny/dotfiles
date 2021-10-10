@@ -1,0 +1,32 @@
+#!/usr/bin/env bash 
+source "$(dirname -- $(dirname -- $0))/lib/color-printer.bash"
+
+usage="Usage: nd <command> [...args]"
+print_usage() {
+  nd::print_yellow "${usage}\n"
+  nd::print_yellow "Commands:\n"
+  nd::print_purple "  nd help\tprint this message\n"
+  while read name; do
+    nd::print_purple "  nd $(basename -s .bash $name | sed 's/_nd-//g')\t[...]\n"
+  done < <(find "$(dirname -- $0)" -type f -iname "_nd-*.bash")
+}
+
+main() {
+  local cmd
+  case "${1:---help}" in
+    --help) print_usage;;
+    *)
+      cmd="$(dirname -- $0)/_nd-$1.bash"
+      if ! [[ -e "${cmd}" ]]; then
+        nd::print_error "ERROR: unknown command \`$1'\r\n"
+        print_usage "$@"
+        exit 1
+      fi
+      shift
+      /usr/bin/env bash "${cmd}" "$@"
+      ;;
+  esac
+}
+
+main "$@"
+

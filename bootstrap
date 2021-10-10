@@ -1,20 +1,30 @@
 #!/usr/bin/env bash -i
 set -e
 
+PKG_LIST="ripgrep coreutils gpg2"
+
+info() { printf "\r[ \033[00;34m..\033[0m ] $1\n"; }
+user() { printf "\r[ \033[0;33m??\033[0m ] $1"; }
+success() { printf "\r\033[2K[ \033[00;32mOK\033[0m ] $1\n"; }
+fail() { printf "\r\033[2K[\033[0;31mFAIL\033[0m] $1\n" >&2; }
+okee() { success "DONE\r\n"; }
+
 # Symlinks dotfiles in the ETC directory to the user home dir
 # Globals:
 #   None
 # Arguments:
-#   None
-main() {
+#   executable path
+install_dotfiles() {
+  info "Installing dotfiles"
   local etc_dir="$(dirname -- $0)/etc"
   for dotfile in $(find "${etc_dir}" -type f -exec realpath {} \;); do
     local install_path="${HOME}/.$(basename $dotfile)"
-    echo "Installing $(basename $dotfile) ..."
+    info "Installing $(basename $dotfile) "
     if ! [[ -h "${install_path}" || -e "${install_path}" ]]; then
       ln -s "${dotfile}" "${install_path}"
-    else
-      read -p "Replace ${install_path}? (Y/n): " proceed
+    elif ! [[ -h "${install_path}" ]]; then
+      user "Replace ${install_path}? (Y/n): "
+      read proceed
       if [[ "${proceed}" == [yY] ]]; then
         mv "${install_path}" "${install_path}.bak"
         echo -e "\tCreated a backup of ${install_path} -> ${install_path}.bak"
@@ -22,8 +32,36 @@ main() {
       else
         echo -e "\tSkipped $(basename $dotfile)"
       fi
+    else
+      echo -e "\tAlready installed!"
     fi
   done
+  okee
+}
+
+# Globals:
+#   PKG_LIST
+# Arguments:
+#   None
+install_share() {
+  info "Installing submodules"
+  git submodule init > /dev/null
+  git submodule update > /dev/null
+  if (( $? != 0 )); then
+    fail "ERROR: could not install submodules"
+  else
+    okee
+  fi
+  (
+    eval "$(share/homebrew/bin/brew shellenv)"
+    brew update --force --quiet > /dev/null
+    brew install -y --quiet "${PKG_LIST}" > /dev/null
+  )
+}
+
+main() {
+  install_dotfiles "$@"
+  install_share
 }
 
 main "$@"

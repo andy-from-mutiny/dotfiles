@@ -1,7 +1,15 @@
 # $LOCAL_DIR/share -> git repos / source code
 # $LOCAL_DIR/etc   -> dotfiles
 # $LOCAL_DIR/bin   -> executables
-LOCAL_DIR="${HOME}/.local"; export LOCAL_DIR
+LOCAL_DIR="${HOME}/Dev/dotfiles"; export LOCAL_DIR
+PATH="${LOCAL_DIR}/bin:${PATH}"
+EDITOR="vim"
+
+HISTFILE="${HOME}/.zsh_history"
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd notify
+unsetopt beep
 
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _complete _ignored _approximate
@@ -17,20 +25,21 @@ if [[ -d "${ASDF_DIR}" ]]; then
   fpath=("${ASDF_DIR}/completions" $fpath)
 fi
 
+HOMEBREW_DIR="${LOCAL_DIR}/share/homebrew"; export HOMEBREW_DIR
+if [[ -d "${HOMEBREW_DIR}" ]]; then
+  eval "$($HOMEBREW_DIR/bin/brew shellenv)"
+  fpath=("${HOMEBREW_DIR}/share/zsh/site-functions" $fpath)
+fi
+
 alias rm='rm -i'
 alias mkdir='mkdir -p'
 alias ll='ls -alh'
 alias l='ls -l'
-alias v='vim'
+alias d='docker $*'
+alias c='docker-compose $*'
+alias v='${EDITOR} $*'
 alias g='git'
-alias ga='git add'
-alias gs='git status'
-alias gc='git commit'
-alias gpush='git push origin $(git rev-parse --abbrev-ref HEAD)'
-alias gsave='git add . && git stash -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"'
 
-PATH="${LOCAL_DIR}/bin:/usr/local/sbin:${PATH}"
-EDITOR="vim"
 PS1="%~
 %# "
 
