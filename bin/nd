@@ -3,11 +3,11 @@ source "$(dirname -- $(dirname -- $0))/lib/color-printer.bash"
 
 usage="Usage: nd <command> [...args]"
 print_usage() {
-  nd::print_yellow "${usage}\n"
-  nd::print_yellow "Commands:\n"
-  nd::print_purple "  nd help\tprint this message\n"
+  nd::echo_yellow "${usage}"
+  nd::echo_yellow "Commands:"
+  nd::echo_purple "  nd help\tprint this message"
   while read name; do
-    nd::print_purple "  nd $(basename -s .bash $name | sed 's/_nd-//g')\t[...]\n"
+    nd::echo_purple "  nd $(basename -s .bash $name | sed 's/_nd-//g')\t[...]"
   done < <(find "$(dirname -- $0)" -type f -iname "_nd-*.bash")
 }
 
@@ -18,7 +18,7 @@ main() {
     *)
       cmd="$(dirname -- $0)/_nd-$1.bash"
       if ! [[ -e "${cmd}" ]]; then
-        nd::print_error "ERROR: unknown command \`$1'\r\n"
+        nd::echo_error "ERROR: unknown command \`$1'"
         print_usage "$@"
         exit 1
       fi
