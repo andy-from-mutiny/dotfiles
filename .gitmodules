@@ -1,0 +1,3 @@
+[submodule "share/asdf"]
+	path = share/asdf
+	url = https://github.com/asdf-vm/asdf.git
