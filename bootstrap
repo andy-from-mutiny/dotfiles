@@ -1,7 +1,8 @@
 #!/usr/bin/env bash -i
 set -e
 
-PKG_LIST="ripgrep coreutils gpg2"
+declare -a PKG_LIST
+PKG_LIST=(coreutils gpg2 asdf ripgrep)
 
 info() { printf "\r[ \033[00;34m..\033[0m ] $1\n"; }
 user() { printf "\r[ \033[0;33m??\033[0m ] $1"; }
@@ -17,7 +18,7 @@ okee() { success "DONE\r\n"; }
 install_dotfiles() {
   info "Installing dotfiles"
   local etc_dir="$(dirname -- $0)/etc"
-  for dotfile in $(find "${etc_dir}" -type f -exec realpath {} \;); do
+  for dotfile in $(find "${etc_dir}" -type f); do
     local install_path="${HOME}/.$(basename $dotfile)"
     info "Installing $(basename $dotfile) "
     if ! [[ -h "${install_path}" || -e "${install_path}" ]]; then
@@ -44,19 +45,18 @@ install_dotfiles() {
 # Arguments:
 #   None
 install_share() {
-  info "Installing submodules"
-  git submodule init > /dev/null
-  git submodule update > /dev/null
+  info "Installing homebrew"
+  which brew > /dev/null
   if (( $? != 0 )); then
-    fail "ERROR: could not install submodules"
-  else
-    okee
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if (( $? != 0 )); then
+      fail "Unable to install Homebrew"
+      exit 1;
+    fi
   fi
-  (
-    eval "$(share/homebrew/bin/brew shellenv)"
-    brew update --force --quiet > /dev/null
-    brew install -y --quiet "${PKG_LIST}" > /dev/null
-  )
+  brew doctor > /dev/null
+  brew update --force > /dev/null
+  brew install --quiet "${PKG_LIST}" > /dev/null
 }
 
 main() {

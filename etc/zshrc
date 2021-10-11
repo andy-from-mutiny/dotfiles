@@ -2,7 +2,6 @@
 # $LOCAL_DIR/etc   -> dotfiles
 # $LOCAL_DIR/bin   -> executables
 LOCAL_DIR="${HOME}/Dev/dotfiles"; export LOCAL_DIR
-PATH="${LOCAL_DIR}/bin:${PATH}"
 EDITOR="vim"
 
 HISTFILE="${HOME}/.zsh_history"
@@ -18,18 +17,9 @@ zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit && compinit
 # End of lines added by compinstall
 
-ASDF_DIR="${LOCAL_DIR}/share/asdf"; export ASDF_DIR
-ASDF_DATA_DIR="${ASDF_DIR}"; export ASDF_DATA_DIR
-if [[ -d "${ASDF_DIR}" ]]; then
-  source "${ASDF_DIR}/asdf.sh"
-  fpath=("${ASDF_DIR}/completions" $fpath)
-fi
-
-HOMEBREW_DIR="${LOCAL_DIR}/share/homebrew"; export HOMEBREW_DIR
-HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
-if [[ -d "${HOMEBREW_DIR}" ]]; then
-  eval "$($HOMEBREW_DIR/bin/brew shellenv)"
-  fpath=("${HOMEBREW_DIR}/share/zsh/site-functions" $fpath)
+ASDF_COMPLETIONS="/usr/local/opt/asdf/libexec/asdf.sh"
+if [[ -e "${ASDF_COMPLETIONS}" ]]; then
+  source "${ASDF_COMPLETIONS}"
 fi
 
 alias rm='rm -iv'
@@ -46,3 +36,5 @@ alias g='git'
 PS1="%~
 %# "
 
+MUTINY_HOME_DIR="${HOME}/Dev/mutiny"; export MUTINY_HOME_DIR
+PATH="${LOCAL_DIR}/bin:${MUTINY_HOME_DIR}/mutiny-local/bin:${PATH}"
