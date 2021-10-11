@@ -17,7 +17,9 @@ zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit && compinit
 # End of lines added by compinstall
 
-ASDF_COMPLETIONS="/usr/local/opt/asdf/libexec/asdf.sh"
+ASDF_DIR="/usr/local/opt/asdf/libexec"; export ASDF_DIR
+ASDF_DATA_DIR="${HOME}/.asdf"; export ASDF_DATA_DIR
+ASDF_COMPLETIONS="${ASDF_DIR}/asdf.sh"
 if [[ -e "${ASDF_COMPLETIONS}" ]]; then
   source "${ASDF_COMPLETIONS}"
 fi
