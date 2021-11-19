@@ -17,7 +17,7 @@ okee() { success "DONE\r\n"; }
 #   executable path
 install_dotfiles() {
   info "Installing dotfiles"
-  local etc_dir="$(dirname -- $0)/etc"
+  local etc_dir="$(realpath $(dirname -- $0)/etc)"
   for dotfile in $(find "${etc_dir}" -type f); do
     local install_path="${HOME}/.$(basename $dotfile)"
     info "Installing $(basename $dotfile) "

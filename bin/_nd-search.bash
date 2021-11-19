@@ -1,4 +1,4 @@
-main() { rg "$@" | less -FRSX; }
+main() { rg -n "$@" | less -FRSX; }
 
 main "$@"
 

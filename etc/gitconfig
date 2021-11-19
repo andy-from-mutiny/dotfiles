@@ -11,7 +11,8 @@
 	editor = vim
 [alias]
 	p = !git push origin $(git rev-parse --abbrev-ref HEAD)
-        s = !git add . && git stash -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"
+        s = !git stash push -a -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"
+	a = !git add . -p
         ci = commit
 	co = checkout
         st = status -sb

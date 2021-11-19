@@ -20,9 +20,9 @@ autoload -Uz compinit && compinit
 ASDF_DIR="/usr/local/opt/asdf/libexec"; export ASDF_DIR
 ASDF_DATA_DIR="${HOME}/.asdf"; export ASDF_DATA_DIR
 ASDF_COMPLETIONS="${ASDF_DIR}/asdf.sh"
-if [[ -e "${ASDF_COMPLETIONS}" ]]; then
-  source "${ASDF_COMPLETIONS}"
-fi
+
+[[ -e "${ASDF_COMPLETIONS}" ]] && source "${ASDF_COMPLETIONS}"
+[[ `asdf which kubectl` ]] && source <(kubectl completion zsh)
 
 alias rm='rm -iv'
 alias mv='mv -v'
@@ -34,9 +34,11 @@ alias d='docker $*'
 alias c='docker-compose $*'
 alias v='${EDITOR} $*'
 alias g='git'
+alias k='kubectl'
+alias m='mutiny'
 
-PS1="%~
-%# "
+PS1="$(tput setaf 2)%~
+%#$(tput sgr0) "
 
 MUTINY_HOME_DIR="${HOME}/Dev/mutiny"; export MUTINY_HOME_DIR
-PATH="${LOCAL_DIR}/bin:${MUTINY_HOME_DIR}/mutiny-local/bin:${PATH}"
+PATH="${LOCAL_DIR}/bin:${MUTINY_HOME_DIR}/mutiny-local/bin:/usr/local/sbin:${PATH}"

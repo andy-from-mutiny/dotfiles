@@ -20,3 +20,4 @@ map j gj
 map k gk
 map <leader>sp :setlocal spell!<CR>
 set spelllang=en_us
+autocmd FileType ruby compiler ruby
