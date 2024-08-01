@@ -2,7 +2,7 @@
 set -e
 
 declare -a PKG_LIST
-PKG_LIST=(coreutils gpg2 asdf ripgrep nvim)
+PKG_LIST=(coreutils gpg2 asdf ripgrep nvim ollama)
 
 info() { printf "\r[ \033[00;34m..\033[0m ] $1\n"; }
 user() { printf "\r[ \033[0;33m??\033[0m ] $1"; }
