@@ -15,6 +15,7 @@ main() {
   local cmd
   case "${1:---help}" in
     --help) print_usage;;
+    completions) cat "$(dirname -- $0)/nd-completions.bash";;
     *)
       cmd="$(dirname -- $0)/_nd-$1.bash"
       if ! [[ -e "${cmd}" ]]; then

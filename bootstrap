@@ -2,7 +2,7 @@
 set -e
 
 declare -a PKG_LIST
-PKG_LIST=(coreutils gpg2 asdf ripgrep)
+PKG_LIST=(coreutils gpg2 asdf ripgrep nvim)
 
 info() { printf "\r[ \033[00;34m..\033[0m ] $1\n"; }
 user() { printf "\r[ \033[0;33m??\033[0m ] $1"; }
@@ -59,8 +59,37 @@ install_share() {
   brew install --quiet "${PKG_LIST}" > /dev/null
 }
 
+# Symlinks neovim config in the ETC directory to the user config dir
+# Globals:
+#   None
+# Arguments:
+#   executable path
+install_neovim() {
+  info "Installing neovim"
+  local nvim_dir="$(realpath $(dirname -- $0)/nvim)/"
+	local target_dir="$HOME/.config/nvim"
+	mkdir -p "${target_dir}"
+	if ! [[ -h "${target_dir}" && -d "${target_dir}" ]]; then
+		ln -vs "${nvim_dir}" "${target_dir}"
+	elif ! [[ -h "${target_dir}" ]]; then
+		user "Replace ${target_dir}? (Y/n): "
+		read proceed
+		if [[ "${proceed}" == [yY] ]]; then
+			mv "${target_dir}" "${target_dir}.bak"
+			echo -e "\tCreated a backup of ${target_dir} -> ${target_dir}.bak"
+			ln -s "${nvim_dir}" "${target_dir}"
+		else
+			echo -e "\tSkipped $(basename $dotfile)"
+		fi
+	else
+		echo -e "\tAlready Installed!"
+	fi
+}
+
+
 main() {
   install_dotfiles "$@"
+	install_neovim
   install_share
 }
 

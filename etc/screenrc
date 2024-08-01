@@ -1,0 +1,14 @@
+# Vim like key bindings for moving around windows
+bind l focus right # C-a l goes right
+bind h focus left  # C-a h goes left
+bind k focus up    # C-a k goes up
+bind j focus down  # C-a j goes down
+bind ' ' windows
+
+altscreen on
+defscrollback 3000
+shell -$SHELL
+startup_message off
+term screen-256color
+vbell off
+

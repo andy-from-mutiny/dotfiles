@@ -2,7 +2,7 @@
 # $LOCAL_DIR/etc   -> dotfiles
 # $LOCAL_DIR/bin   -> executables
 LOCAL_DIR="${HOME}/Dev/dotfiles"; export LOCAL_DIR
-EDITOR="vim"
+EDITOR="nvim"
 
 HISTFILE="${HOME}/.zsh_history"
 HISTSIZE=1000
@@ -20,6 +20,10 @@ autoload -Uz compinit && compinit
 ASDF_DIR="/usr/local/opt/asdf/libexec"; export ASDF_DIR
 ASDF_DATA_DIR="${HOME}/.asdf"; export ASDF_DATA_DIR
 ASDF_COMPLETIONS="${ASDF_DIR}/asdf.sh"
+
+MUTINY_HOME_DIR="${HOME}/Dev/mutiny"; export MUTINY_HOME_DIR
+RUBY_DIR="$(dirname $(asdf which ruby))"
+PATH="${LOCAL_DIR}/bin:${MUTINY_HOME_DIR}/mutiny-local/bin:/usr/local/sbin:${RUBY_DIR}:${PATH}"
 
 [[ -e "${ASDF_COMPLETIONS}" ]] && source "${ASDF_COMPLETIONS}"
 [[ `asdf which kubectl` ]] && source <(kubectl completion zsh)
@@ -40,5 +44,36 @@ alias m='mutiny'
 PS1="$(tput setaf 2)%~
 %#$(tput sgr0) "
 
-MUTINY_HOME_DIR="${HOME}/Dev/mutiny"; export MUTINY_HOME_DIR
-PATH="${LOCAL_DIR}/bin:${MUTINY_HOME_DIR}/mutiny-local/bin:/usr/local/sbin:${PATH}"
+
+
+# JINA_CLI_BEGIN
+
+## autocomplete
+if [[ ! -o interactive ]]; then
+    return
+fi
+
+compctl -K _jina jina
+
+_jina() {
+  local words completions
+  read -cA words
+
+  if [ "${#words}" -eq 2 ]; then
+    completions="$(jina commands)"
+  else
+    completions="$(jina completions ${words[2,-2]})"
+  fi
+
+  reply=(${(ps:
+:)completions})
+}
+
+# session-wise fix
+ulimit -n 4096
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+# JINA_CLI_END
+
+
+
