@@ -8,18 +8,19 @@
 	gpgsign = true
 [core]
 	pager = less -FRSX
-	editor = vim
+	editor = nvim
 [alias]
 	p = !git push origin $(git rev-parse --abbrev-ref HEAD)
-        s = !git stash push -a -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"
+  s = !git stash push -a -m "save: $(git rev-parse --abbrev-ref HEAD) - $(date)"
 	a = !git add . -p
-        ci = commit
+  ci = commit
 	co = checkout
-        st = status -sb
-        br = branch
-        fo = fetch origin
-        dt = difftool
-        unpush = !git push -f origin HEAD^:$(git remote show <remote_name> | awk '/HEAD branch/ {print $NF}')
+  st = status -sb
+  br = branch
+  fo = fetch origin
+  rb = pull --rebase origin
+  dt = difftool
+  unpush = !git push -f origin HEAD^:$(git remote show <remote_name> | awk '/HEAD branch/ {print $NF}')
 [diff]
 	tool = vimdiff
 [merge]
