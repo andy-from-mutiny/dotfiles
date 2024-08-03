@@ -79,7 +79,7 @@ install_neovim() {
 			echo -e "\tCreated a backup of ${target_dir} -> ${target_dir}.bak"
 			ln -s "${nvim_dir}" "${target_dir}"
 		else
-			echo -e "\tSkipped $(basename $dotfile)"
+			echo -e "\tSkipped $(nvim_dir)"
 		fi
 	else
 		echo -e "\tAlready Installed!"

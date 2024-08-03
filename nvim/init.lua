@@ -1,5 +1,4 @@
 local opt = vim.opt
-local cmd = vim.cmd
 local g = vim.g
 local map = vim.api.nvim_set_keymap
 
